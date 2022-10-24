@@ -125,28 +125,87 @@ def write_doc(file_to_read, doc_path, doc_name, code_version, doc_author, dl_lin
                         break
                 break
 
+def code_stats():
 
-description = "TypeDocs is an automated inline python documentation tool that makes writing documentation quick and " \
-              "easy. "
+    with open("functions.py", "r") as code:
+        read_code = code.readlines()
 
-write_doc(file_to_read="functions.py", doc_path="typedocs.tdc", doc_name="TypeDocs",
-              code_version="0.0.1", doc_author="Grayfaux", dl_link="somewhere.com", short_description=description)
+    blanks = 0
+    for i in read_code:
+        if i == "\n":
+            blanks += 1
+    line_data = f"Lines:{len(read_code)}\nBlank Lines:{blanks}\nLines only Code:{len(read_code)-blanks}\n"
+    print(line_data)
 
-# for i in read_code:
-#     if "import" in i and read_code.index(i) < 10:
-#         print(f'{read_code.index(i)}: {i}')
-#
-# functions = 0
-# for i in read_code:
-#     if "def" in i:
-#         print(f'{read_code.index(i)}: {i.replace("def", "")}')
-#         functions += 1
-# print(f"functions: {functions}")
-#
-#
-# returns = 0
-# for i in read_code:
-#     if "return" in i and "#" not in i:
-#         print(f'{read_code.index(i)}: {i}')
-#         returns += 1
-# print(f"returns: {returns}")
+    imports = 0
+    imports_body = ""
+    for i in read_code:
+        if "import" in i and read_code.index(i) < 10:
+            imports_body = f"{f'{imports_body}{read_code.index(i)}: {i}'}"
+            imports += 1
+    imports_data = f"Imports:{imports}\n{imports_body}"
+    print(imports_data)
+
+    loops = 0
+    loops_body = ""
+    for i in read_code:
+        if "#" not in i:
+            if " for " in i or " while " in i:
+                loops_body = f'{loops_body}{f"{read_code.index(i)}:{i}"}'
+                loops += 1
+    loops_data = f"Loops:{loops}\n{loops_body}"
+    print(loops_data)
+
+
+    functions = 0
+    func_body = ""
+    for i in read_code:
+        if "def" in i and "#" not in i:
+            func_body = f"{func_body}{f'{read_code.index(i)}: {i}'}"
+            functions += 1
+    function_data = f"functions:{functions}\n{func_body}"
+    print(function_data)
+
+
+    print("Return Stats")
+    returns = 0
+    for i in read_code:
+        if "return" in i and "#" not in i:
+            print(f'{read_code.index(i)}: {i}')
+            returns += 1
+    print(f"returns: {returns}\n")
+
+
+    print("Print Stats")
+    prints = 0
+    for i in read_code:
+        if "print" in i and "#" not in i:
+            print(f'{read_code.index(i)}: {i}')
+            prints += 1
+    print(f"prints: {prints}\n")
+
+    print("Append Stats")
+    appends = 0
+    for i in read_code:
+        if "append" in i and "#" not in i:
+            print(f'{read_code.index(i)}: {i}')
+            appends += 1
+    print(f"appends: {appends}\n")
+
+    print("Variable Stats")
+    variables = 0
+    for i in read_code:
+        if "=" in i and "#" not in i:
+            print(f'{read_code.index(i)}: {i}')
+            variables += 1
+    print(f"variables: {variables}\n")
+
+
+    print("Read/Write Stats")
+    opens = 0
+    for i in read_code:
+        if "open" in i and "#" not in i:
+            print(f'{read_code.index(i)}: {i}')
+            opens += 1
+    print(f"read/writes: {opens}\n")
+code_stats()
