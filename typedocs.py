@@ -1,7 +1,6 @@
 import os
 import time as t
 
-td_tag = ["# ht>", "# h>", "# >", "# t>", "# rt>", "# rt/t", "# ol>", "# ole>", "# end>", "# c>", "# dc>"]
 
 def write_doc(file_to_read, doc_file_name, doc_name, code_version, doc_author, dl_link, short_description):
 
@@ -137,8 +136,6 @@ def write_doc(file_to_read, doc_file_name, doc_name, code_version, doc_author, d
                         break
                 break
 
-def code_stats(file_to_read, doc_file_name):
-
     with open(file_to_read, "r") as code:
         read_code = code.readlines()
 
@@ -245,10 +242,10 @@ def code_stats(file_to_read, doc_file_name):
             dev_comments += 1
     dev_comments_data = f"dev comments:{dev_comments}"
 
-    return_format = f"Document Overview:\n\nLines: {line_data}\nCode Lines: {len(read_code)-blanks}\nImports: {imports}\nLoops: {loops}\n" \
-                    f"Functions: {functions}\nReturns: {returns}\nPrints: {prints}\n" \
-                    f"Appends: {appends}\nVariables: {variables}\nClasses: {classes}\nMethods: {methods}\n" \
-                    f"Read/Writes: {opens}\nComments: {comments}\nDev_comments: {dev_comments}\n" \
+    return_format = f"\nDocument Stats:\n\nLines: {line_data}\nCode Lines: {len(read_code)-blanks}\n" \
+                    f"Imports: {imports}\nLoops: {loops}\nFunctions: {functions}\nReturns: {returns}\n" \
+                    f"Prints: {prints}\nAppends: {appends}\nVariables: {variables}\nClasses: {classes}\n" \
+                    f"Methods: {methods}\nRead/Writes: {opens}\nComments: {comments}\nDev_comments: {dev_comments}\n" \
                     f"\n\n" \
                     f"Document Index:\n\n" \
                     f"{imports_data}\n\n" \
@@ -263,14 +260,14 @@ def code_stats(file_to_read, doc_file_name):
                     f"{opens_data}\n\n" \
                     f"{comments_data}\n\n" \
                     f"{dev_comments_data}\n\n" \
+                    f"\n" \
 
     doc_root = "typedocs"
     if not os.path.exists(doc_root):
         os.mkdir(doc_root)
-    with open(f"{doc_root}/{doc_file_name}", "w") as w_data:
-        w_data.write(return_format)
+        with open(f"{doc_root}/{doc_file_name}", "w") as w_data:
+            w_data.write(return_format)
+    else:
+        with open(f"{doc_root}/{doc_file_name}", "a") as w_data:
+            w_data.write(return_format)
 
-    return return_format
-
-def write_full_doc():
-    pass
