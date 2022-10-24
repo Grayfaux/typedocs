@@ -125,9 +125,9 @@ def write_doc(file_to_read, doc_path, doc_name, code_version, doc_author, dl_lin
                         break
                 break
 
-def code_stats():
+def code_stats(file_to_read, path_to_write):
 
-    with open("functions.py", "r") as code:
+    with open(file_to_read, "r") as code:
         read_code = code.readlines()
 
     blanks = 0
@@ -201,15 +201,19 @@ def code_stats():
             opens += 1
     opens_data = f"read/writes:{opens}\n{opens_body}"
 
-    return_format = f"{line_data}\n" \
-                    f"{imports_data}\n" \
-                    f"{loops_data}\n" \
-                    f"{function_data}\n" \
-                    f"{returns_data}\n" \
-                    f"{prints_data}\n" \
-                    f"{appends_data}\n" \
-                    f"{variables_data}\n" \
-                    f"{opens_data}\n"
+    return_format = f"{line_data}\n\n" \
+                    f"{imports_data}\n\n" \
+                    f"{loops_data}\n\n" \
+                    f"{function_data}\n\n" \
+                    f"{returns_data}\n\n" \
+                    f"{prints_data}\n\n\n" \
+                    f"{appends_data}\n\n" \
+                    f"{variables_data}\n\n" \
+                    f"{opens_data}\n\n" \
+
+
+    with open(path_to_write, "w") as w_data:
+        w_data.write(return_format)
 
     return return_format
 
