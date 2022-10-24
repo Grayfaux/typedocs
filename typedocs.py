@@ -135,7 +135,6 @@ def code_stats():
         if i == "\n":
             blanks += 1
     line_data = f"Lines:{len(read_code)}\nBlank Lines:{blanks}\nLines only Code:{len(read_code)-blanks}\n"
-    print(line_data)
 
     imports = 0
     imports_body = ""
@@ -144,7 +143,6 @@ def code_stats():
             imports_body = f"{f'{imports_body}{read_code.index(i)}: {i}'}"
             imports += 1
     imports_data = f"Imports:{imports}\n{imports_body}"
-    print(imports_data)
 
     loops = 0
     loops_body = ""
@@ -154,8 +152,6 @@ def code_stats():
                 loops_body = f'{loops_body}{f"{read_code.index(i)}:{i}"}'
                 loops += 1
     loops_data = f"Loops:{loops}\n{loops_body}"
-    print(loops_data)
-
 
     functions = 0
     func_body = ""
@@ -164,48 +160,56 @@ def code_stats():
             func_body = f"{func_body}{f'{read_code.index(i)}: {i}'}"
             functions += 1
     function_data = f"functions:{functions}\n{func_body}"
-    print(function_data)
 
-
-    print("Return Stats")
     returns = 0
+    returns_body = ""
     for i in read_code:
-        if "return" in i and "#" not in i:
-            print(f'{read_code.index(i)}: {i}')
+        if " return " in i and "#" not in i:
+            returns_body =  f"{returns_body}{f'{read_code.index(i)}: {i}'}"
             returns += 1
-    print(f"returns: {returns}\n")
+    returns_data = f"returns:{returns}\n{returns_body}"
 
-
-    print("Print Stats")
     prints = 0
+    prints_body = ""
     for i in read_code:
         if "print" in i and "#" not in i:
-            print(f'{read_code.index(i)}: {i}')
+            prints_body =  f"{prints_body}{f'{read_code.index(i)}: {i}'}"
             prints += 1
-    print(f"prints: {prints}\n")
+    prints_data = f"prints:{prints}\n{prints_body}"
 
-    print("Append Stats")
     appends = 0
+    appends_body = ""
     for i in read_code:
         if "append" in i and "#" not in i:
-            print(f'{read_code.index(i)}: {i}')
+            appends_body = f"{appends_body}{f'{read_code.index(i)}: {i}'}"
             appends += 1
-    print(f"appends: {appends}\n")
+    appends_data = f"appends:{appends}\n{appends_body}"
 
-    print("Variable Stats")
     variables = 0
+    variables_body = ""
     for i in read_code:
         if "=" in i and "#" not in i:
-            print(f'{read_code.index(i)}: {i}')
+            variables_body = f"{variables_body}{f'{read_code.index(i)}: {i}'}"
             variables += 1
-    print(f"variables: {variables}\n")
+    variables_data = f"variables:{variables}\n{variables_body}"
 
-
-    print("Read/Write Stats")
     opens = 0
+    opens_body = ""
     for i in read_code:
         if "open" in i and "#" not in i:
-            print(f'{read_code.index(i)}: {i}')
+            opens_body = f"{opens_body}{f'{read_code.index(i)}: {i}'}"
             opens += 1
-    print(f"read/writes: {opens}\n")
-code_stats()
+    opens_data = f"read/writes:{opens}\n{opens_body}"
+
+    return_format = f"{line_data}\n" \
+                    f"{imports_data}\n" \
+                    f"{loops_data}\n" \
+                    f"{function_data}\n" \
+                    f"{returns_data}\n" \
+                    f"{prints_data}\n" \
+                    f"{appends_data}\n" \
+                    f"{variables_data}\n" \
+                    f"{opens_data}\n"
+
+    return return_format
+
