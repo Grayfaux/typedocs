@@ -10,17 +10,17 @@ def write_doc(file_to_read, doc_file_name, doc_name, code_version, doc_author, d
              f"Author: {doc_author}\n" \
              f"{dl_link}\n" \
              f"Documentation Updated:{t.strftime('%m/%d/%Y, %H:%M:%S')}\n" \
-             f"Description: {short_description}\n" \
+             f"Description:\n{short_description}\n" \
 
 
     doc_root = "typedocs"
     if not os.path.exists(doc_root):
         os.mkdir(doc_root)
         with open(f"{doc_root}/{doc_file_name}", "w") as w_data:
-            w_data.write(f"{header}\n\n\n")
+            w_data.write(f"{header}\n\n")
     else:
         with open(f"{doc_root}/{doc_file_name}", "w") as w_data:
-            w_data.write(f"{header}\n\n\n")
+            w_data.write(f"{header}\n\n")
 
     with open(file_to_read, "r") as code:
         read_code = code.readlines()
@@ -38,7 +38,7 @@ def write_doc(file_to_read, doc_file_name, doc_name, code_version, doc_author, d
 
             if td_tag[6] in line:
                 ol_split = line.split("# ol>")
-                ol_format = f"{ol_split[1]}\n{spacing}{ol_split[0]}"
+                ol_format = f"{ol_split[1]}\n{spacing}{ol_split[0]}\n"
                 read_code = read_code[i + 1:]
 
                 doc_root = "typedocs"
@@ -151,7 +151,7 @@ def code_stats(file_to_read, doc_file_name):
     imports = 0
     imports_body = ""
     for i in read_code:
-        if "import" in i and read_code.index(i) < 10:
+        if "import" in i and "#" not in i:
             imports_body = f"{f'{imports_body}{read_code.index(i)}: {i}'}"
             imports += 1
     imports_data = f"Imports:{imports}\n{imports_body}"
@@ -168,10 +168,26 @@ def code_stats(file_to_read, doc_file_name):
     functions = 0
     func_body = ""
     for i in read_code:
-        if "def" in i and "#" not in i:
+        if "def" in i and "#" not in i and "self" not in i:
             func_body = f"{func_body}{f'{read_code.index(i)}: {i}'}"
             functions += 1
     function_data = f"functions:{functions}\n{func_body}"
+
+    classes = 0
+    class_body = ""
+    for i in read_code:
+        if "class" in i and "#" not in i:
+            class_body = f"{class_body}{f'{read_code.index(i)}: {i}'}"
+            classes += 1
+    class_data = f"classes:{classes}\n{class_body}"
+
+    methods = 0
+    method_body = ""
+    for i in read_code:
+        if "def" in i and "#" not in i and "self" in i:
+            method_body = f"{method_body}{f'{read_code.index(i)}: {i}'}"
+            methods += 1
+    method_data = f"methods:{methods}\n{method_body}"
 
     returns = 0
     returns_body = ""
@@ -200,7 +216,7 @@ def code_stats(file_to_read, doc_file_name):
     variables = 0
     variables_body = ""
     for i in read_code:
-        if "=" in i and "#" not in i:
+        if "=" in i and "#" not in i and "==" not in i:
             variables_body = f"{variables_body}{f'{read_code.index(i)}: {i}'}"
             variables += 1
     variables_data = f"variables:{variables}\n{variables_body}"
@@ -231,13 +247,15 @@ def code_stats(file_to_read, doc_file_name):
 
     return_format = f"Document Overview:\n\nLines: {line_data}\nCode Lines: {len(read_code)-blanks}\nImports: {imports}\nLoops: {loops}\n" \
                     f"Functions: {functions}\nReturns: {returns}\nPrints: {prints}\n" \
-                    f"Appends: {appends}\nVariables: {variables}\nRead/Writes: {opens}\nComments: {comments}\n" \
-                    f"Dev_comments: {dev_comments}\n" \
+                    f"Appends: {appends}\nVariables: {variables}\nClasses: {classes}\nMethods: {methods}\n" \
+                    f"Read/Writes: {opens}\nComments: {comments}\nDev_comments: {dev_comments}\n" \
                     f"\n\n" \
                     f"Document Index:\n\n" \
                     f"{imports_data}\n\n" \
                     f"{loops_data}\n\n" \
                     f"{function_data}\n\n" \
+                    f"{class_data}\n\n" \
+                    f"{method_data}\n\n" \
                     f"{returns_data}\n\n" \
                     f"{prints_data}\n\n" \
                     f"{appends_data}\n\n" \
