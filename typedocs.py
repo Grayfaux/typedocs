@@ -16,7 +16,6 @@ def write_doc(file_to_read, doc_path, doc_name, code_version, doc_author, dl_lin
         with open(doc_path, "w") as w_data:
             w_data.write(f"{header}\n\n\n")
 
-
     with open(file_to_read, "r") as code:
         read_code = code.readlines()
 
@@ -125,6 +124,7 @@ def write_doc(file_to_read, doc_path, doc_name, code_version, doc_author, dl_lin
                         break
                 break
 
+
 def code_stats(file_to_read, path_to_write):
 
     with open(file_to_read, "r") as code:
@@ -206,7 +206,7 @@ def code_stats(file_to_read, path_to_write):
                     f"{loops_data}\n\n" \
                     f"{function_data}\n\n" \
                     f"{returns_data}\n\n" \
-                    f"{prints_data}\n\n\n" \
+                    f"{prints_data}\n\n" \
                     f"{appends_data}\n\n" \
                     f"{variables_data}\n\n" \
                     f"{opens_data}\n\n" \
