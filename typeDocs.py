@@ -1,12 +1,26 @@
 import os
+import time as t
 
 
-def write_doc(file_to_read, doc_path):
+def write_doc(file_to_read, doc_path, doc_name, code_version, doc_author, dl_link, short_description):
+
+    header = f"{doc_name}\n" \
+             f"Ver: {code_version}\n" \
+             f"Author: {doc_author}\n" \
+             f"{dl_link}\n" \
+             f"Documentation Updated:{t.strftime('%m/%d/%Y, %H:%M:%S')}\n" \
+             f"Description: {short_description}\n" \
+
+
+    if not os.path.exists(doc_path):
+        with open(doc_path, "w") as w_data:
+            w_data.write(f"{header}\n\n\n")
+
 
     with open(file_to_read, "r") as code:
         read_code = code.readlines()
 
-    td_tag = ["# ht>", "# h>", "# >", "# t>", "# rt>", "# rt/t", "# ol>", "# end>"]
+    td_tag = ["# ht>", "# h>", "# >", "# t>", "# rt>", "# rt/t", "# ol>", "# ole>", "# end>"]
     spacing = "    "
     entries = 1
 
@@ -14,8 +28,36 @@ def write_doc(file_to_read, doc_path):
     end = False
     while not end:
         for i, line in enumerate(read_code):
-            if td_tag[7] in line:
+            if td_tag[8] in line:
                 end = True
+
+            if td_tag[6] in line:
+                ol_split = line.split("# ol>")
+                ol_format = f"{ol_split[1]}\n{spacing}{ol_split[0]}\n"
+                read_code = read_code[i + 1:]
+                entries += 1
+
+                if not os.path.exists(doc_path):
+                    with open(doc_path, "w") as w_data:
+                        w_data.write(f"{ol_format}\n\n\n")
+                else:
+                    with open(doc_path, "a") as w_data:
+                        w_data.write(f"{ol_format}\n\n\n")
+                break
+
+            if td_tag[7] in line:
+                ole_split = line.split("# ole>")
+                ole_format = f"{entries}: {ole_split[1]}\n{spacing}{ole_split[0]}\n"
+                read_code = read_code[i + 1:]
+                entries += 1
+
+                if not os.path.exists(doc_path):
+                    with open(doc_path, "w") as w_data:
+                        w_data.write(f"{ole_format}\n\n\n")
+                else:
+                    with open(doc_path, "a") as w_data:
+                        w_data.write(f"{ole_format}\n\n\n")
+                break
 
             if td_tag[0] in line:
                 format_header_title = line
@@ -51,10 +93,10 @@ def write_doc(file_to_read, doc_path):
 
                 if not os.path.exists(doc_path):
                     with open(doc_path, "w") as w_data:
-                        w_data.write(f"{doc_entry_format}\n")
+                        w_data.write(f"{doc_entry_format}\n\n")
                 else:
                     with open(doc_path, "a") as w_data:
-                        w_data.write(f"{doc_entry_format}\n")
+                        w_data.write(f"{doc_entry_format}\n\n")
                 doc_entry_format = ""
                 break
 
@@ -66,7 +108,7 @@ def write_doc(file_to_read, doc_path):
 
                 if not os.path.exists(doc_path):
                     with open(doc_path, "w") as w_data:
-                        w_data.write(f"{doc_entry_format}\n")
+                        w_data.write(f"{doc_entry_format}\n\n")
                 else:
                     with open(doc_path, "a") as w_data:
                         w_data.write(f"{doc_entry_format}\n")
@@ -79,14 +121,16 @@ def write_doc(file_to_read, doc_path):
                         entries += 1
                         doc_entry_format = ""
                         with open(doc_path, "a") as w_data:
-                            w_data.write("\n\n")
+                            w_data.write("\n\n\n")
                         break
                 break
 
 
-write_doc("functions.py", "typedoc.tdc")
+description = "TypeDocs is an automated inline python documentation tool that makes writing documentation quick and " \
+              "easy. "
 
-
+write_doc(file_to_read="functions.py", doc_path="typedocs.tdc", doc_name="TypeDocs",
+              code_version="0.0.1", doc_author="Grayfaux", dl_link="somewhere.com", short_description=description)
 
 # for i in read_code:
 #     if "import" in i and read_code.index(i) < 10:
