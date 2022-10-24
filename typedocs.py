@@ -1,8 +1,9 @@
 import os
 import time as t
 
+td_tag = ["# ht>", "# h>", "# >", "# t>", "# rt>", "# rt/t", "# ol>", "# ole>", "# end>", "# c>", "# dc>"]
 
-def write_doc(file_to_read, doc_path, doc_name, code_version, doc_author, dl_link, short_description):
+def write_doc(file_to_read, doc_file_name, doc_name, code_version, doc_author, dl_link, short_description):
 
     header = f"{doc_name}\n" \
              f"Ver: {code_version}\n" \
@@ -12,14 +13,19 @@ def write_doc(file_to_read, doc_path, doc_name, code_version, doc_author, dl_lin
              f"Description: {short_description}\n" \
 
 
-    if not os.path.exists(doc_path):
-        with open(doc_path, "w") as w_data:
+    doc_root = "typedocs"
+    if not os.path.exists(doc_root):
+        os.mkdir(doc_root)
+        with open(f"{doc_root}/{doc_file_name}", "w") as w_data:
+            w_data.write(f"{header}\n\n\n")
+    else:
+        with open(f"{doc_root}/{doc_file_name}", "w") as w_data:
             w_data.write(f"{header}\n\n\n")
 
     with open(file_to_read, "r") as code:
         read_code = code.readlines()
 
-    td_tag = ["# ht>", "# h>", "# >", "# t>", "# rt>", "# rt/t", "# ol>", "# ole>", "# end>"]
+    td_tag = ["# ht>", "# h>", "# >", "# t>", "# rt>", "# rt/t", "# ol>", "# ole>", "# end>", "# c>", "# dc>"]
     spacing = "    "
     entries = 1
 
@@ -32,16 +38,17 @@ def write_doc(file_to_read, doc_path, doc_name, code_version, doc_author, dl_lin
 
             if td_tag[6] in line:
                 ol_split = line.split("# ol>")
-                ol_format = f"{ol_split[1]}\n{spacing}{ol_split[0]}\n"
+                ol_format = f"{ol_split[1]}\n{spacing}{ol_split[0]}"
                 read_code = read_code[i + 1:]
-                entries += 1
 
-                if not os.path.exists(doc_path):
-                    with open(doc_path, "w") as w_data:
-                        w_data.write(f"{ol_format}\n\n\n")
+                doc_root = "typedocs"
+                if not os.path.exists(doc_root):
+                    os.mkdir(doc_root)
+                    with open(f"{doc_root}/{doc_file_name}", "w") as w_data:
+                        w_data.write(f"{spacing}{ol_format}\n")
                 else:
-                    with open(doc_path, "a") as w_data:
-                        w_data.write(f"{ol_format}\n\n\n")
+                    with open(f"{doc_root}/{doc_file_name}", "a") as w_data:
+                        w_data.write(f"{spacing}{ol_format}\n")
                 break
 
             if td_tag[7] in line:
@@ -50,12 +57,14 @@ def write_doc(file_to_read, doc_path, doc_name, code_version, doc_author, dl_lin
                 read_code = read_code[i + 1:]
                 entries += 1
 
-                if not os.path.exists(doc_path):
-                    with open(doc_path, "w") as w_data:
-                        w_data.write(f"{ole_format}\n\n\n")
+                doc_root = "typedocs"
+                if not os.path.exists(doc_root):
+                    os.mkdir(doc_root)
+                    with open(f"{doc_root}/{doc_file_name}", "w") as w_data:
+                        w_data.write(f"{ole_format}\n\n")
                 else:
-                    with open(doc_path, "a") as w_data:
-                        w_data.write(f"{ole_format}\n\n\n")
+                    with open(f"{doc_root}/{doc_file_name}", "a") as w_data:
+                        w_data.write(f"{ole_format}\n\n")
                 break
 
             if td_tag[0] in line:
@@ -90,12 +99,14 @@ def write_doc(file_to_read, doc_path, doc_name, code_version, doc_author, dl_lin
                 read_code = read_code[i+1:]
                 entries += 1
 
-                if not os.path.exists(doc_path):
-                    with open(doc_path, "w") as w_data:
+                doc_root = "typedocs"
+                if not os.path.exists(doc_root):
+                    os.mkdir(doc_root)
+                    with open(f"{doc_root}/{doc_file_name}", "w") as w_data:
                         w_data.write(f"{doc_entry_format}\n\n")
                 else:
-                    with open(doc_path, "a") as w_data:
-                        w_data.write(f"{doc_entry_format}\n\n")
+                    with open(f"{doc_root}/{doc_file_name}", "a") as w_data:
+                        w_data.write(f"{doc_entry_format}\n")
                 doc_entry_format = ""
                 break
 
@@ -105,27 +116,28 @@ def write_doc(file_to_read, doc_path, doc_name, code_version, doc_author, dl_lin
                 doc_entry_format = f"{doc_entry_format}\n{spacing}-{split_rt_line[1]}{spacing}{spacing}{split_rt_line[0]}\n"
                 read_code = read_code[i+1:]
 
-                if not os.path.exists(doc_path):
-                    with open(doc_path, "w") as w_data:
+                doc_root = "typedocs"
+                if not os.path.exists(doc_root):
+                    os.mkdir(doc_root)
+                    with open(f"{doc_root}/{doc_file_name}", "w") as w_data:
                         w_data.write(f"{doc_entry_format}\n\n")
                 else:
-                    with open(doc_path, "a") as w_data:
+                    with open(f"{doc_root}/{doc_file_name}", "a") as w_data:
                         w_data.write(f"{doc_entry_format}\n")
                 for r, r_line in enumerate(read_code):
                     if td_tag[5] not in r_line:
-                        with open(doc_path, "a") as w_data:
+                        with open(f"{doc_root}/{doc_file_name}", "a") as w_data:
                             w_data.write(f"{spacing}{spacing}{r_line}")
                     if td_tag[5] in r_line:
                         read_code = read_code[i + 1:]
                         entries += 1
                         doc_entry_format = ""
-                        with open(doc_path, "a") as w_data:
-                            w_data.write("\n\n\n")
+                        with open(f"{doc_root}/{doc_file_name}", "a") as w_data:
+                            w_data.write("\n\n")
                         break
                 break
 
-
-def code_stats(file_to_read, path_to_write):
+def code_stats(file_to_read, doc_file_name):
 
     with open(file_to_read, "r") as code:
         read_code = code.readlines()
@@ -134,7 +146,7 @@ def code_stats(file_to_read, path_to_write):
     for i in read_code:
         if i == "\n":
             blanks += 1
-    line_data = f"Lines:{len(read_code)}\nBlank Lines:{blanks}\nLines only Code:{len(read_code)-blanks}\n"
+    line_data = f"Lines:{len(read_code)}\nBlank Lines:{blanks}"
 
     imports = 0
     imports_body = ""
@@ -201,7 +213,28 @@ def code_stats(file_to_read, path_to_write):
             opens += 1
     opens_data = f"read/writes:{opens}\n{opens_body}"
 
-    return_format = f"{line_data}\n\n" \
+    comments = 0
+    comments_body = ""
+    for i in read_code:
+        if "# c>" in i:
+            comments_slice = i.replace("# c>", "")
+            comments_body = f"{comments_body}{f'{read_code.index(i)}: {comments_slice}'}"
+            comments += 1
+    comments_data = f"comments:{comments}\n{comments_body}"
+
+    dev_comments = 0
+
+    for i in read_code:
+        if "# dc>" in i:
+            dev_comments += 1
+    dev_comments_data = f"dev comments:{dev_comments}"
+
+    return_format = f"Document Overview:\n\nLines: {line_data}\nCode Lines: {len(read_code)-blanks}\nImports: {imports}\nLoops: {loops}\n" \
+                    f"Functions: {functions}\nReturns: {returns}\nPrints: {prints}\n" \
+                    f"Appends: {appends}\nVariables: {variables}\nRead/Writes: {opens}\nComments: {comments}\n" \
+                    f"Dev_comments: {dev_comments}\n" \
+                    f"\n\n" \
+                    f"Document Index:\n\n" \
                     f"{imports_data}\n\n" \
                     f"{loops_data}\n\n" \
                     f"{function_data}\n\n" \
@@ -210,10 +243,16 @@ def code_stats(file_to_read, path_to_write):
                     f"{appends_data}\n\n" \
                     f"{variables_data}\n\n" \
                     f"{opens_data}\n\n" \
+                    f"{comments_data}\n\n" \
+                    f"{dev_comments_data}\n\n" \
 
-
-    with open(path_to_write, "w") as w_data:
+    doc_root = "typedocs"
+    if not os.path.exists(doc_root):
+        os.mkdir(doc_root)
+    with open(f"{doc_root}/{doc_file_name}", "w") as w_data:
         w_data.write(return_format)
 
     return return_format
 
+def write_full_doc():
+    pass
