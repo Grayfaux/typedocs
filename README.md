@@ -1,5 +1,6 @@
 # typedocs
 python inline auto documentation assistant
+Status: In development
 
 Typedocs is a tool for to help write documentation as you code.
 
