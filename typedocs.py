@@ -27,7 +27,9 @@ def write_doc(file_to_read, root_path, new_file_name, doc_name, code_version, do
     with open(file_to_read, "r") as code:
         read_code = code.readlines()
 
-    td_tag = ["# ht>", "# hc>", "# >", "# t>", "# rt>", "# rt/t>", "# ol>", "# ole>", "# end>", "# c>", "# dc>", "# mln>", "# mln/t>", "# n>"]
+    td_tag = ["# ht>", "# hc>", "# >", "# t>", "# rt>", "# rt/t>", "# ol>", "# ole>", "# end>",
+              "# c>", "# dc>", "# mln>", "# mln/t>", "# n>"]
+
     spacing = "    "
     entries = 1
 
@@ -276,11 +278,13 @@ def code_stats(file_to_read, root_path, doc_file_name):
             dev_comments += 1
     dev_comments_data = f"dev comments:{dev_comments}"
 
+    # Will create a loop for items in Document Index to check for items with 0 entries
+
     return_format = f"\nDocument Stats:\n\nLines: {line_data}\nCode Lines: {len(read_code)-blanks}\n" \
                     f"Imports: {imports}\nLoops: {loops}\nFunctions: {functions}\nReturns: {returns}\n" \
                     f"Prints: {prints}\nAppends: {appends}\nVariables/Assignments: {variables}\nClasses: {classes}\n" \
                     f"Methods: {methods}\nRead/Writes: {opens}\nComments: {comments}\nDev_comments: {dev_comments}\n" \
-                    f"\n\n" \
+                    f"\n\n"\
                     f"Document Index:\n\n" \
                     f"{imports_data}\n\n" \
                     f"{loops_data}\n\n" \
@@ -399,6 +403,3 @@ def about_tag(tag):
             return f"{tag_dict[tag]}"
         else:
             return None
-
-
-about_tag("# rt>")
